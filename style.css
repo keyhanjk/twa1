@@ -40,3 +40,16 @@ html {
 .code {
     font-family: 'RobotoMono';
 }
+
+.button {
+    border-radius: 10px;
+    padding: 3px;
+    border-bottom-width: 3px;
+    transition: all cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.button:hover {}
+
+.button:active {
+    border-bottom-width: 0px;
+}
