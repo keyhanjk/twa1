@@ -9,7 +9,7 @@
     <link href="vendor/bootstrap/bootstrap.min.css" rel="stylesheet">
 
     <script src="vendor/bootstrap/bootstrap.bundle.min.js"></script>
-    <script src="vendor/jquery/jquery-3.7.1.min.js"></script>
+    <script src="vendor/jquery/jquery.mobile-1.4.5.min.js"></script>
 
     <link href="style.css" rel="stylesheet">
 </head>
@@ -216,7 +216,7 @@
     </div>
 
     <script>
-        $(document).ready(function () {
+        $(document).on('pageinit', function () {
             $('.code').fadeOut();
         });
 
