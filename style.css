@@ -1,0 +1,42 @@
+@font-face {
+    font-family: 'RobotoMono';
+    src: url('font/Roboto_Mono/static/RobotoMono-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Open_Sans';
+    src: url('font/Roboto_Mono/static/OpenSans-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Rubik';
+    src: url('font/Roboto_Mono/static/Rubik-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'GoodShreakOutline';
+    src: url('font/GoodShreakOutline-yYwJM.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Pingsan';
+    src: url('font/Pingsan-nARJ4.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Sis';
+    src: url('font/Sis-JpRJm.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'KinsleyDemo';
+    src: url('font/KinsleyDemo-nAx6O.otf') format('opentype');
+}
+
+html {
+    font-family: 'Open_Sans';
+}
+
+.code {
+    font-family: 'RobotoMono';
+}
