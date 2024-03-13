@@ -53,3 +53,8 @@ html {
 .button:active {
     border-bottom-width: 0px;
 }
+
+.img-nft {
+    width: 100px;
+    height: 100px;
+}
