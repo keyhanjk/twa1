@@ -1,93 +1,113 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Map</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cap simulate</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
-    <link rel="stylesheet" href="https://static.neshan.org/sdk/mapboxgl/v1.13.2/neshan-sdk/v1.1.2/index.css" />
-    <script src="https://static.neshan.org/sdk/mapboxgl/v1.13.2/neshan-sdk/v1.1.2/index.js"></script>
+    <!-- Leaflet Routing Machine CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
 
     <style>
-        @font-face {
-            font-family: "dana";
-            src: url("/static/fonts/dana/dana-fanum-medium.eot");
-            src: url("/static/fonts/dana/dana-fanum-medium.eot?#iefix") format("embedded-opentype"),
-                url("/static/fonts/dana/dana-fanum-medium.woff") format("woff");
-        }
-
-        body {
-            height: 100vh;
-            width: 100vw;
-            margin: 0;
+        #topg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            z-index: 10;
+            background: rgb(255, 255, 255);
+            background: -moz-linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 66%, rgba(255, 255, 255, 0) 100%);
+            background: -webkit-linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 66%, rgba(255, 255, 255, 0) 100%);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 66%, rgba(255, 255, 255, 0) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#ffffff", GradientType=1);
         }
 
         #map {
-            height: 100%;
-            width: 100%;
+            height: 400px;
+            transition-timing-function: linear;
+            transition-duration: 1500ms;
         }
 
-        .mapboxgl-popup-content {
-            font-family: 'dana', sans-serif;
-            transition: all 0.2s;
+        /* Hide the leaflet-routing-container */
+        .leaflet-routing-container {
+            display: none;
         }
     </style>
 </head>
 
 <body>
-    <div id="map"></div>
+    <div id="map" style="height: 400px;"></div>
+    <div id="topg"></div>
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Leaflet Routing Machine JavaScript -->
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <button onclick="start()">start</button>
     <script>
-        const map = new nmp_mapboxgl.Map({
-            mapType: nmp_mapboxgl.Map.mapTypes.neshanVector,
-            container: "map",
-            zoom: 11,
-            pitch: 0,
-            center: [51.389, 35.6892],
-            minZoom: 2,
-            maxZoom: 21,
-            trackResize: true,
-            mapKey: "web.7274a91b04184fa185bfa69b5e174487",
-            poi: true,
-            traffic: false,
-            mapTypeControllerOptions: {
-                show: false,
-                position: 'bottom-left'
-            }
+        // Initialize the map
+        var map = L.map('map').setView([51.505, -0.09], 13);
+
+        // Add a tile layer (you can use your preferred tile provider)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add a marker to the map
+        var startPoint = L.latLng(35.699675, 51.322424);
+        var endPoint = L.latLng(35.703009, 51.336294);
+        var marker = L.marker(startPoint).addTo(map);
+        L.marker(endPoint).addTo(map);
+
+        // Function to move the marker to a new location
+        function moveMarker(lat, lng) {
+            marker.setLatLng([lat, lng]).update();
+            map.panTo([lat, lng]);
+        }
+
+        // Add routing control
+        var control = L.Routing.control({
+            waypoints: [
+                L.latLng(startPoint),
+                L.latLng(endPoint)
+            ],
+            routeWhileDragging: true
+        }).addTo(map);
+
+        let coordinates;
+        control.on('routesfound', function (event) {
+            coordinates = event.routes[0].coordinates;
+            console.log(event.routes);
         });
 
-        const marker = new nmp_mapboxgl.Marker({
-            color: 'red',
-            rotation: 45,
-            draggable: true
-        }).setLngLat([51.389, 35.6892]).addTo(map);
+        let currCoors = [];
+        let i = 0;
+        let t = 0;
+        function startWalking(coordinates) {
+            currCoors = coordinates;
+            t = setInterval(function () {
+                i++;
+                if (i >= currCoors.length) {
+                    alert("به مقصد رسیدید");
+                    clearInterval(t);
+                    return;
+                }
+                let lat = currCoors[i].lat;
+                let lng = currCoors[i].lng;
+                moveMarker(lat, lng);
+            }, 1000);
+        }
 
-        let popup = marker.setPopup(
-            new nmp_mapboxgl.Popup({
-                offset: 25,
-                closeButton: false
-            }).setHTML('<h3>ویپان</h3><p>مشتری در اینجا هست</p>')
-        );
-
-        popup.addTo(map);
-
-        popup.on('click', function () {
-            console.log("1");
-            $(this).fadeOut();
-        });
-
-        $(document).delegate('.mapboxgl-popup-content', 'click', function () {
-            $(this).animate({
-                width: "0px",
-                height: "0px",
-                opacity: "0"
-            }, 500);
-        });
-
+        function start() {
+            var mapDom = document.querySelector('#map');
+            mapDom.style.transform = 'perspective(800px) rotateX(15deg)'
+            startWalking(coordinates);
+        }
     </script>
 </body>
 
