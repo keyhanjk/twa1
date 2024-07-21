@@ -1,14 +1,25 @@
-<canvas id="canvas" width="100%" height="auto"></canvas>
-<script src="https://unpkg.com/@rive-app/canvas"></script>
-<script>
-    let canvas = document.getElementById('canvas');
+<html>
+    <head>
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+    </head>
 
-    // autoplays the first animation in the default artboard
-    let player = new rive.Rive({
-        src: 'emoji.riv',
-        canvas: canvas,
-        autoplay: true,
-        layout: new rive.Layout({ fit: 'cover', alignment: 'center' }),
-        stateMachines: 'State Machine 1'
-    });
-</script>
+    <body>
+        <canvas id="canvas" width="100%" height="auto"></canvas>
+        <script src="https://unpkg.com/@rive-app/canvas"></script>
+        <script>
+            let canvas = document.getElementById('canvas');
+        
+            // autoplays the first animation in the default artboard
+            let player = new rive.Rive({
+                src: 'emoji.riv',
+                canvas: canvas,
+                autoplay: true,
+                layout: new rive.Layout({ fit: 'cover', alignment: 'center' }),
+                stateMachines: 'State Machine 1'
+            });
+        </script>
+    </body>
+</html>
+
